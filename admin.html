@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AEGIS PRO — Master Administrative Command Center</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👑</text></svg>" />
+    <link rel="stylesheet" href="style.css?v=2.5.0" />
+    <script>
+      (function() {
+        const savedTheme = localStorage.getItem('aegis_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (savedTheme === 'dark') {
+          document.documentElement.classList.add('dark-mode');
+          document.addEventListener('DOMContentLoaded', () => document.body.classList.add('dark-mode'));
+        }
+      })();
+    </script>
+    <style>
+        body.admin-body {
+            background: var(--study-bg-base);
+            color: var(--on-surface);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .admin-nav-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 28px;
+            background: var(--study-card-bg);
+            border-bottom: 1px solid var(--study-border);
+            box-shadow: var(--study-shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--on-surface);
+        }
+
+        .admin-brand-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: var(--study-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .admin-brand-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: -0.01em;
+        }
+
+        .admin-brand-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 4px;
+            background: #4f46e5;
+            color: #ffffff;
+            letter-spacing: 0.04em;
+        }
+
+        .admin-container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 28px 24px 60px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Login Screen */
+        .admin-login-wrap {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .admin-login-card {
+            background: var(--study-card-bg);
+            border: 1px solid var(--study-border);
+            border-radius: var(--study-radius-lg);
+            padding: 36px 32px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: var(--study-shadow-modal);
+            text-align: left;
+        }
+
+        .alc-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .alc-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .alc-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .alc-sub {
+            font-size: 12.5px;
+            color: var(--on-surface-3);
+            line-height: 1.5;
+        }
+
+        .alc-banner {
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: var(--study-radius-sm);
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: var(--on-surface-2);
+            line-height: 1.5;
+        }
+
+        .admin-toast-wrap {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+    </style>
+</head>
+
+<body class="admin-body">
+
+    <!-- Top Navigation Header -->
+    <header class="admin-nav-top">
+        <a href="dashboard.html" class="admin-brand">
+            <div class="admin-brand-icon">👑</div>
+            <div>
+                <span class="admin-brand-title">AEGIS PRO</span>
+                <span class="admin-brand-badge">RESTRICTED PORTAL</span>
+            </div>
+        </a>
+
+        <div style="display: flex; align-items: center; gap: 10px;" id="admin-top-actions">
+            <button class="ab" id="theme-btn" onclick="toggleAdminTheme()" title="Toggle Theme">🌓 Theme</button>
+            <a href="dashboard.html" class="ab" style="text-decoration: none;">🎓 Academy Dashboard</a>
+            <button class="ab" id="lock-btn" onclick="lockAdminSession()" style="display: none;">🔒 Sign Out</button>
+        </div>
+    </header>
+
+    <!-- 1. LOGIN / VERIFICATION GATE -->
+    <div id="admin-login-screen" class="admin-login-wrap">
+        <div class="admin-login-card">
+            <div class="alc-header">
+                <div class="alc-icon">🔐</div>
+                <h1 class="alc-title">Master Administrator Gateway</h1>
+                <p class="alc-sub">Dedicated security portal. Access restricted exclusively to authorized administrators.</p>
+            </div>
+
+            <div class="alc-banner">
+                🛡️ <strong>Authorized Identity Required:</strong> Only <code>anupdhokiya0@gmail.com</code> and <code>anupdhokiya066@gmail.com</code> are permitted access to this administrative subsystem.
+            </div>
+
+            <form id="admin-auth-form" onsubmit="handleAdminLogin(event)">
+                <div class="fg" style="margin-bottom: 14px;">
+                    <label class="fl" for="login-email">Administrator Email</label>
+                    <select id="login-email" class="gi" style="cursor: pointer;">
+                        <option value="anupdhokiya066@gmail.com" selected>anupdhokiya066@gmail.com</option>
+                        <option value="anupdhokiya0@gmail.com">anupdhokiya0@gmail.com</option>
+                    </select>
+                </div>
+
+                <div class="fg" style="margin-bottom: 20px;">
+                    <label class="fl" for="login-password">Master Security Passkey</label>
+                    <input type="password" id="login-password" class="gi" placeholder="Enter master security password" required autocomplete="current-password" autofocus />
+                </div>
+
+                <button type="submit" class="ab ab-primary" style="width: 100%; justify-content: center; height: 42px; font-size: 13px;">
+                    ⚡ Authenticate &amp; Launch Console
+                </button>
+                <div style="text-align: center; margin-top: 14px;">
+                    <a href="index.html" style="font-size: 12px; color: var(--on-surface-3); text-decoration: none;">← Return to Main Academy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. MAIN ADMIN COMMAND CENTER (UNLOCKED UPON AUTH) -->
+    <main id="admin-dashboard-screen" class="admin-container" style="display: none;">
+        <header class="ph" style="margin-bottom: 20px;">
+            <div>
+                <div class="ptag ptag-admin">⚡ Authorized Master Command</div>
+                <h1 class="pt">Admin Management Console</h1>
+                <p class="ps">Live operator telemetry, curriculum milestones, customer support ticket moderation, and database backups.</p>
+            </div>
+            <div class="ph-right">
+                <button class="ab" onclick="exportCSV()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> 📊 Export CSV</button>
+                <button class="ab" onclick="exportJSON()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> 📁 Export JSON</button>
+                <button class="ab ab-primary" onclick="loadAdminData()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> 🔄 Refresh</button>
+            </div>
+        </header>
+
+        <div class="admin-auth-banner" style="margin-bottom: 24px;">
+            <div class="aab-icon">👑</div>
+            <div class="aab-info">
+                <div class="aab-title">Master Administrator: <span class="aab-highlight" id="admin-user-badge">anupdhokiya066@gmail.com</span></div>
+                <div class="aab-sub">Full administrative privileges active for <strong>anupdhokiya066@gmail.com</strong> and <strong>anupdhokiya0@gmail.com</strong>. Accessing real-time Firestore user profiles &amp; local operator state.</div>
+            </div>
+            <div class="aab-badge" id="admin-db-status">🟢 Cloud Connected</div>
+        </div>
+
+        <!-- Metrics Row -->
+        <div class="admin-stats-grid">
+            <div class="gc admin-stat-card">
+                <div class="asc-lbl">TOTAL REGISTERED OPERATORS</div>
+                <div class="asc-val" id="stat-total">0</div>
+                <div class="asc-sub">Users in database</div>
+            </div>
+            <div class="gc admin-stat-card">
+                <div class="asc-lbl">AVG CURRICULUM COMPLETION</div>
+                <div class="asc-val" id="stat-avg">0%</div>
+                <div class="asc-sub">Across all specializations</div>
+            </div>
+            <div class="gc admin-stat-card">
+                <div class="asc-lbl">SUPPORT TICKETS</div>
+                <div class="asc-val" id="stat-tickets">0</div>
+                <div class="asc-sub" id="stat-tickets-open">0 Open Inquiries</div>
+            </div>
+            <div class="gc admin-stat-card">
+                <div class="asc-lbl">ACTIVE SPECIALIZATION</div>
+                <div class="asc-val asc-val-sm" id="stat-track">Defense &amp; SOC</div>
+                <div class="asc-sub">Highest enrolled track</div>
+            </div>
+        </div>
+
+        <!-- User Management Table Section -->
+        <div class="gc admin-panel-card" style="margin-top: 24px;">
+            <div class="admin-panel-header">
+                <div class="aph-left">
+                    <h3 class="ct">Operator Database &amp; Progress Monitor</h3>
+                    <p class="ps">Inspect learner profiles, monitor milestone progress, and download compliance records.</p>
+                </div>
+                <div class="aph-search-row">
+                    <input type="text" id="user-search-input" class="gi" placeholder="Search by name, email, or role..." oninput="handleSearch(this.value)" />
+                    <select id="track-filter-select" class="gi" onchange="handleFilter(this.value)">
+                        <option value="all">All Specializations</option>
+                        <option value="DEFENSE">🔍 Cyber Defense</option>
+                        <option value="OFFENSIVE">⚔️ Offensive Security</option>
+                        <option value="ENGINEERING">🛡️ Security Engineering</option>
+                        <option value="GRC">⚖️ Governance &amp; GRC</option>
+                        <option value="AI_SECURITY">🤖 AI Security</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>OPERATOR</th>
+                            <th>EMAIL</th>
+                            <th>SPECIALIZATION</th>
+                            <th>PROGRESS</th>
+                            <th>STATUS</th>
+                            <th>LAST ACTIVE</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-tbody">
+                        <tr><td colspan="7" class="loading-td">Loading operator directory...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Support Ticket Management Section -->
+        <div class="gc admin-panel-card" style="margin-top: 24px;">
+            <div class="admin-panel-header">
+                <div class="aph-left">
+                    <h3 class="ct">Customer Support Tickets Queue</h3>
+                    <p class="ps">Incoming requests sent to <strong>anupdhokiya066@gmail.com</strong>.</p>
+                </div>
+            </div>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>TICKET ID</th>
+                            <th>SENDER</th>
+                            <th>CATEGORY</th>
+                            <th>SUBJECT</th>
+                            <th>PRIORITY</th>
+                            <th>DATE</th>
+                            <th>STATUS</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tickets-tbody">
+                        <tr><td colspan="8" class="loading-td">Loading support queue...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Admin Inspect User Modal -->
+    <div id="admin-user-modal" class="account-modal" style="display: none;">
+        <div class="account-modal-card" style="max-width: 650px;">
+            <div class="account-modal-header">
+                <h2 class="account-modal-title" id="aum-title">🔍 Operator Detail Dossier</h2>
+                <button class="account-modal-close" onclick="closeAdminModal()">✕</button>
+            </div>
+            <div id="aum-content" style="padding: 16px 0; max-height: 70vh; overflow-y: auto;">
+                <!-- Injected dynamically -->
+            </div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                <button class="ab" onclick="closeAdminModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-wrap" class="admin-toast-wrap"></div>
+
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+    <script>
+        (function() {
+            const AUTHORIZED_EMAILS = ['anupdhokiya066@gmail.com', 'anupdhokiya0@gmail.com'];
+            const MASTER_PASSKEY = 'anup@5212';
+
+            let usersCache = [];
+            let filterTrack = 'all';
+            let searchQuery = '';
+
+            function showToast(msg, type = 'ok') {
+                const wrap = document.getElementById('toast-wrap');
+                const t = document.createElement('div');
+                t.className = 'toast ' + type;
+                t.textContent = msg;
+                wrap.appendChild(t);
+                setTimeout(() => t.remove(), 3500);
+            }
+
+            function isSessionAuthed() {
+                return sessionStorage.getItem('aegis_admin_pass_auth') === 'true';
+            }
+
+            function checkAccess() {
+                const loginScreen = document.getElementById('admin-login-screen');
+                const dashScreen = document.getElementById('admin-dashboard-screen');
+                const lockBtn = document.getElementById('lock-btn');
+
+                if (isSessionAuthed()) {
+                    loginScreen.style.display = 'none';
+                    dashScreen.style.display = 'block';
+                    lockBtn.style.display = 'inline-flex';
+                    const activeEmail = sessionStorage.getItem('aegis_admin_active_email') || 'anupdhokiya066@gmail.com';
+                    document.getElementById('admin-user-badge').textContent = activeEmail;
+                    loadAdminData();
+                } else {
+                    loginScreen.style.display = 'flex';
+                    dashScreen.style.display = 'none';
+                    lockBtn.style.display = 'none';
+                }
+            }
+
+            window.handleAdminLogin = function(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value.trim().toLowerCase();
+                const pass = document.getElementById('login-password').value;
+
+                if (!AUTHORIZED_EMAILS.includes(email)) {
+                    showToast('Access Denied: Unrecognized administrator email.', 'err');
+                    return;
+                }
+
+                if (pass !== MASTER_PASSKEY) {
+                    showToast('Access Denied: Incorrect administrator password.', 'err');
+                    return;
+                }
+
+                sessionStorage.setItem('aegis_admin_pass_auth', 'true');
+                sessionStorage.setItem('aegis_admin_active_email', email);
+                showToast('Authentication Verified! Welcome Master Admin.', 'ok');
+                checkAccess();
+            };
+
+            window.lockAdminSession = function() {
+                sessionStorage.removeItem('aegis_admin_pass_auth');
+                sessionStorage.removeItem('aegis_admin_active_email');
+                showToast('Admin session terminated.', 'ok');
+                checkAccess();
+            };
+
+            window.toggleAdminTheme = function() {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('aegis_theme', isDark ? 'dark' : 'light');
+            };
+
+            if (localStorage.getItem('aegis_theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+
+            // Firebase init
+            const firebaseConfig = {
+                apiKey: "AIzaSyA0-t4fOkrKe7aa43f9U9qjjdH7cD7DvxY",
+                authDomain: "aegsipro-4b227.firebaseapp.com",
+                projectId: "aegsipro-4b227",
+                storageBucket: "aegsipro-4b227.firebasestorage.app",
+                messagingSenderId: "930650138048",
+                appId: "1:930650138048:web:cf4ed0db4208a8c72d9425"
+            };
+
+            let db = null;
+            try {
+                if (window.firebase && !firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                if (window.firebase) db = firebase.firestore();
+            } catch (err) {
+                console.warn('Firestore offline:', err);
+            }
+
+            window.loadAdminData = function() {
+                const statusBadge = document.getElementById('admin-db-status');
+                if (statusBadge) statusBadge.textContent = '🔄 Loading Directory...';
+
+                if (db) {
+                    db.collection('users').get()
+                        .then(snapshot => {
+                            const users = [];
+                            snapshot.forEach(doc => {
+                                users.push({ uid: doc.id, ...doc.data() });
+                            });
+                            if (users.length > 0) {
+                                usersCache = users;
+                                if (statusBadge) statusBadge.textContent = '🟢 Firestore Online (' + users.length + ' Users)';
+                                renderUsers();
+                                updateStats();
+                                renderTickets();
+                                return;
+                            }
+                            loadFallbackData();
+                        })
+                        .catch(err => {
+                            console.warn('Firestore error, loading fallback:', err);
+                            loadFallbackData();
+                        });
+                } else {
+                    loadFallbackData();
+                }
+            };
+
+            function loadFallbackData() {
+                const statusBadge = document.getElementById('admin-db-status');
+                if (statusBadge) statusBadge.textContent = '🟡 Local Database Mode';
+
+                const activeAdminEmail = sessionStorage.getItem('aegis_admin_active_email') || 'anupdhokiya066@gmail.com';
+
+                usersCache = [
+                    {
+                        uid: 'master-admin-01',
+                        name: 'Master Security Administrator',
+                        email: activeAdminEmail,
+                        role: 'Executive Chief Information Security Officer',
+                        activeTrack: 'ENGINEERING',
+                        done: { 'm1-0': true, 'm1-1': true, 'm1-2': true, 'm2-0': true, 'm2-1': true, 'm3-0': true, 'm4-0': true },
+                        syncedAt: new Date().toISOString()
+                    },
+                    {
+                        uid: 'op-101',
+                        name: 'Alex Rivera',
+                        email: 'a.rivera@cybersec.org',
+                        role: 'Senior SOC Analyst (Blue Team)',
+                        activeTrack: 'DEFENSE',
+                        done: { 'mod-def-1-0': true, 'mod-def-1-1': true, 'mod-def-1-2': true, 'mod-def-2-0': true },
+                        syncedAt: new Date(Date.now() - 3600000 * 4).toISOString()
+                    },
+                    {
+                        uid: 'op-102',
+                        name: 'Marcus Vance',
+                        email: 'm.vance@redteamlabs.io',
+                        role: 'Lead Penetration Tester (Red Team)',
+                        activeTrack: 'OFFENSIVE',
+                        done: { 'mod-off-1-0': true, 'mod-off-1-1': true, 'mod-off-2-0': true, 'mod-off-2-1': true, 'mod-off-3-0': true },
+                        syncedAt: new Date(Date.now() - 3600000 * 12).toISOString()
+                    },
+                    {
+                        uid: 'op-103',
+                        name: 'Elena Rostova',
+                        email: 'elena.r@clouddefense.corp',
+                        role: 'DevSecOps & Platform Architect',
+                        activeTrack: 'ENGINEERING',
+                        done: { 'm1-0': true, 'm1-1': true, 'm1-2': true, 'm2-0': true, 'm2-1': true, 'm3-0': true },
+                        syncedAt: new Date(Date.now() - 3600000 * 24).toISOString()
+                    },
+                    {
+                        uid: 'op-104',
+                        name: 'Jonathan Sterling',
+                        email: 'j.sterling@grcadvisory.com',
+                        role: 'Compliance & Audit Director',
+                        activeTrack: 'GRC',
+                        done: { 'mod-grc-1-0': true, 'mod-grc-1-1': true, 'mod-grc-2-0': true },
+                        syncedAt: new Date(Date.now() - 3600000 * 48).toISOString()
+                    },
+                    {
+                        uid: 'op-105',
+                        name: 'Dr. Priya Sharma',
+                        email: 'priya.sharma@aisec.ai',
+                        role: 'AI Red Teamer & Safety Lead',
+                        activeTrack: 'AI_SECURITY',
+                        done: { 'mod-ai-1-0': true, 'mod-ai-1-1': true, 'mod-ai-2-0': true, 'mod-ai-2-1': true },
+                        syncedAt: new Date(Date.now() - 3600000 * 72).toISOString()
+                    }
+                ];
+
+                renderUsers();
+                updateStats();
+                renderTickets();
+            }
+
+            function updateStats() {
+                const total = usersCache.length;
+                document.getElementById('stat-total').textContent = total;
+
+                let sumPct = 0;
+                const trackCounts = {};
+
+                usersCache.forEach(u => {
+                    const doneCount = u.done ? Object.values(u.done).filter(Boolean).length : 0;
+                    const pct = Math.min(100, Math.round((doneCount / 32) * 100));
+                    sumPct += pct;
+
+                    const trk = u.activeTrack || 'DEFENSE';
+                    trackCounts[trk] = (trackCounts[trk] || 0) + 1;
+                });
+
+                const avg = total > 0 ? Math.round(sumPct / total) : 0;
+                document.getElementById('stat-avg').textContent = avg + '%';
+
+                let topTrack = 'DEFENSE';
+                let topCount = 0;
+                for (const trk in trackCounts) {
+                    if (trackCounts[trk] > topCount) {
+                        topCount = trackCounts[trk];
+                        topTrack = trk;
+                    }
+                }
+
+                const trackNames = {
+                    'DEFENSE': 'Cyber Defense & SOC',
+                    'OFFENSIVE': 'Offensive Security',
+                    'ENGINEERING': 'Security Engineering',
+                    'GRC': 'Governance & Risk',
+                    'AI_SECURITY': 'AI & Emerging Sec'
+                };
+                document.getElementById('stat-track').textContent = trackNames[topTrack] || topTrack;
+
+                let tickets = [];
+                try {
+                    tickets = JSON.parse(localStorage.getItem('aegis_user_tickets') || '[]');
+                } catch(e) {}
+                document.getElementById('stat-tickets').textContent = tickets.length;
+                const openCount = tickets.filter(t => t.status !== 'RESOLVED').length;
+                document.getElementById('stat-tickets-open').textContent = openCount + ' Open Inquiries';
+            }
+
+            function escapeHtml(str) {
+                if (!str) return '';
+                return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+            }
+
+            function renderUsers() {
+                const tbody = document.getElementById('users-tbody');
+                if (!tbody) return;
+
+                const q = searchQuery.toLowerCase().trim();
+                const filtered = usersCache.filter(u => {
+                    const matchTrack = (filterTrack === 'all') || (u.activeTrack === filterTrack);
+                    const matchQuery = !q ||
+                        (u.name && u.name.toLowerCase().includes(q)) ||
+                        (u.email && u.email.toLowerCase().includes(q)) ||
+                        (u.role && u.role.toLowerCase().includes(q));
+                    return matchTrack && matchQuery;
+                });
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="loading-td">No operators match the filter criteria.</td></tr>';
+                    return;
+                }
+
+                const trackBadges = {
+                    'DEFENSE': '<span class="prem-role-pill pill-def">🔍 DEFENSE</span>',
+                    'OFFENSIVE': '<span class="prem-role-pill pill-off">⚔️ OFFENSIVE</span>',
+                    'ENGINEERING': '<span class="prem-role-pill pill-eng">🛡️ ENGINEERING</span>',
+                    'GRC': '<span class="prem-role-pill pill-grc">⚖️ GRC</span>',
+                    'AI_SECURITY': '<span class="prem-role-pill pill-ai">🤖 AI SECURITY</span>'
+                };
+
+                tbody.innerHTML = filtered.map(u => {
+                    const doneCount = u.done ? Object.values(u.done).filter(Boolean).length : 0;
+                    const pct = Math.min(100, Math.round((doneCount / 32) * 100));
+                    const trkBadge = trackBadges[u.activeTrack] || `<span class="prem-role-pill">${u.activeTrack || 'GENERAL'}</span>`;
+                    const dateStr = u.syncedAt ? new Date(u.syncedAt).toLocaleDateString() : 'Active Today';
+
+                    return `
+                        <tr>
+                            <td>
+                                <strong>${escapeHtml(u.name || 'Anonymous Specialist')}</strong>
+                                <div style="font-size: 11px; color: var(--on-surface-3);">${escapeHtml(u.role || 'Security Operator')}</div>
+                            </td>
+                            <td><span style="font-family: monospace; font-size: 11.5px;">${escapeHtml(u.email || 'N/A')}</span></td>
+                            <td>${trkBadge}</td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div class="mini-bar" style="width: 70px;"><div class="mini-fill" style="width: ${pct}%"></div></div>
+                                    <span style="font-size: 11px; font-weight: 700; font-family: monospace;">${pct}%</span>
+                                </div>
+                            </td>
+                            <td><span class="user-status-pill status-active">Active</span></td>
+                            <td><span style="font-size: 11px; color: var(--on-surface-3);">${dateStr}</span></td>
+                            <td>
+                                <button class="ab" style="padding: 4px 8px; font-size: 11px;" onclick="inspectUser('${u.uid}')">🔍 Inspect</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            window.handleSearch = function(val) {
+                searchQuery = val;
+                renderUsers();
+            };
+
+            window.handleFilter = function(val) {
+                filterTrack = val;
+                renderUsers();
+            };
+
+            window.inspectUser = function(uid) {
+                const u = usersCache.find(x => x.uid === uid);
+                if (!u) return;
+
+                const modal = document.getElementById('admin-user-modal');
+                const title = document.getElementById('aum-title');
+                const content = document.getElementById('aum-content');
+
+                title.textContent = '🔍 Operator Dossier: ' + (u.name || 'Specialist');
+
+                const doneCount = u.done ? Object.values(u.done).filter(Boolean).length : 0;
+                const pct = Math.min(100, Math.round((doneCount / 32) * 100));
+                const ctfCount = u.ctfs ? Object.values(u.ctfs).filter(Boolean).length : 0;
+
+                content.innerHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div style="background: var(--study-card-bg-subtle); border: 1px solid var(--study-border); border-radius: var(--study-radius-sm); padding: 14px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div><span style="font-size:11px; color:var(--on-surface-3);">Operator Name:</span><br><strong>${escapeHtml(u.name || 'N/A')}</strong></div>
+                                <div><span style="font-size:11px; color:var(--on-surface-3);">Email Address:</span><br><strong style="font-family: monospace;">${escapeHtml(u.email || 'N/A')}</strong></div>
+                                <div><span style="font-size:11px; color:var(--on-surface-3);">Assigned Track:</span><br><strong>${escapeHtml(u.activeTrack || 'ENGINEERING')}</strong></div>
+                                <div><span style="font-size:11px; color:var(--on-surface-3);">Designation / Role:</span><br><strong>${escapeHtml(u.role || 'Operator')}</strong></div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <div class="stat-box">
+                                <span class="stat-box-lbl">PROGRESS</span>
+                                <strong style="font-size: 18px; color: var(--study-primary);">${pct}%</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-box-lbl">MODULES DONE</span>
+                                <strong style="font-size: 18px; color: #10b981;">${doneCount} / 32</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-box-lbl">CTF SOLVES</span>
+                                <strong style="font-size: 18px; color: #8b5cf6;">${ctfCount}</strong>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span style="font-size: 12px; font-weight: 700; margin-bottom: 6px; display: block;">Raw Document Sync Payload:</span>
+                            <pre style="background: #0f172a; color: #38bdf8; padding: 12px; border-radius: 6px; font-size: 11px; overflow-x: auto; max-height: 180px;">${escapeHtml(JSON.stringify(u, null, 2))}</pre>
+                        </div>
+                    </div>
+                `;
+
+                modal.style.display = 'flex';
+            };
+
+            window.closeAdminModal = function() {
+                document.getElementById('admin-user-modal').style.display = 'none';
+            };
+
+            function renderTickets() {
+                const tbody = document.getElementById('tickets-tbody');
+                if (!tbody) return;
+
+                let tickets = [];
+                try {
+                    tickets = JSON.parse(localStorage.getItem('aegis_user_tickets') || '[]');
+                } catch(e) {}
+
+                if (!tickets.length) {
+                    tickets = [
+                        {
+                            ticketId: 'TKT-841920',
+                            name: 'Alex Rivera',
+                            email: 'a.rivera@cybersec.org',
+                            category: 'VOUCHERS',
+                            priority: 'HIGH',
+                            subject: 'ISC² CC Candidate Voucher question',
+                            status: 'OPEN',
+                            createdAt: new Date(Date.now() - 3600000 * 2).toISOString()
+                        },
+                        {
+                            ticketId: 'TKT-412891',
+                            name: 'Marcus Vance',
+                            email: 'm.vance@redteamlabs.io',
+                            category: 'PAID_PRO',
+                            priority: 'NORMAL',
+                            subject: 'Corporate Reimbursement Letter for OSCP',
+                            status: 'RESOLVED',
+                            createdAt: new Date(Date.now() - 3600000 * 24).toISOString()
+                        }
+                    ];
+                }
+
+                tbody.innerHTML = tickets.map(t => {
+                    const isResolved = t.status === 'RESOLVED';
+                    const statusClass = isResolved ? 'status-active' : 'status-pending';
+                    const statusText = isResolved ? '🟢 Resolved' : '🟡 In Review';
+
+                    return `
+                        <tr>
+                            <td><strong style="font-family: monospace;">${escapeHtml(t.ticketId)}</strong></td>
+                            <td>
+                                <div>${escapeHtml(t.name)}</div>
+                                <div style="font-size: 11px; color: var(--on-surface-3); font-family: monospace;">${escapeHtml(t.email)}</div>
+                            </td>
+                            <td><span class="user-status-pill">${escapeHtml(t.category)}</span></td>
+                            <td><strong>${escapeHtml(t.subject)}</strong></td>
+                            <td><span style="font-weight: 700; font-size: 11px;">${escapeHtml(t.priority)}</span></td>
+                            <td><span style="font-size: 11px; color: var(--on-surface-3);">${new Date(t.createdAt).toLocaleDateString()}</span></td>
+                            <td><span class="user-status-pill ${statusClass}">${statusText}</span></td>
+                            <td>
+                                <button class="ab" style="padding: 4px 8px; font-size: 11px;" onclick="toggleTicket('${t.ticketId}')">
+                                    ${isResolved ? 'Reopen' : 'Mark Done'}
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            window.toggleTicket = function(ticketId) {
+                let tickets = [];
+                try {
+                    tickets = JSON.parse(localStorage.getItem('aegis_user_tickets') || '[]');
+                } catch(e) {}
+
+                const t = tickets.find(x => x.ticketId === ticketId);
+                if (t) {
+                    t.status = (t.status === 'RESOLVED') ? 'OPEN' : 'RESOLVED';
+                    localStorage.setItem('aegis_user_tickets', JSON.stringify(tickets));
+                    showToast('Ticket ' + ticketId + ' status updated.', 'ok');
+                    renderTickets();
+                    updateStats();
+                } else {
+                    showToast('Demo ticket updated.', 'ok');
+                    renderTickets();
+                }
+            };
+
+            window.exportCSV = function() {
+                if (!usersCache.length) {
+                    showToast('No user records available to export.', 'err');
+                    return;
+                }
+                const headers = ['UID', 'Name', 'Email', 'Role', 'Specialization', 'Modules_Completed', 'Sync_Date'];
+                const rows = usersCache.map(u => [
+                    u.uid,
+                    `"${(u.name || '').replace(/"/g, '""')}"`,
+                    u.email,
+                    `"${(u.role || '').replace(/"/g, '""')}"`,
+                    u.activeTrack,
+                    u.done ? Object.values(u.done).filter(Boolean).length : 0,
+                    u.syncedAt || ''
+                ]);
+                const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `aegis-operators-directory-${new Date().toISOString().slice(0, 10)}.csv`;
+                a.click();
+                showToast('Operator CSV directory exported.', 'ok');
+            };
+
+            window.exportJSON = function() {
+                if (!usersCache.length) {
+                    showToast('No user records available to export.', 'err');
+                    return;
+                }
+                const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), cohortCount: usersCache.length, operators: usersCache }, null, 2)], { type: 'application/json' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `aegis-operators-backup-${new Date().toISOString().slice(0, 10)}.json`;
+                a.click();
+                showToast('Full database JSON exported.', 'ok');
+            };
+
+            // Run check on initial load
+            checkAccess();
+        })();
+    </script>
+</body>
+
+</html>

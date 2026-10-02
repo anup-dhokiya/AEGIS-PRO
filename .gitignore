@@ -1,0 +1,28 @@
+# Dependencies & Build artifacts
+node_modules/
+.vercel
+.output/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment & Local Secrets
+.env
+.env.local
+.env.*.local
+
+# Editor & Tooling
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Agent & Scaffolding scratch files
+agent/
+skills-lock.json
+*.log
