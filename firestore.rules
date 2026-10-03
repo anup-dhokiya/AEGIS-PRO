@@ -1,0 +1,16 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow users to access their own document, and allow Admin to manage all user data
+    match /users/{userId} {
+      allow read, write: if request.auth != null && (request.auth.uid == userId || request.auth.token.email in ['anupdhokiya066@gmail.com', 'anupdhokiya0@gmail.com']);
+      allow list: if request.auth != null && request.auth.token.email in ['anupdhokiya066@gmail.com', 'anupdhokiya0@gmail.com'];
+    }
+    // Allow users to create support tickets and admin to read/manage tickets
+    match /support_tickets/{ticketId} {
+      allow create: if true;
+      allow read, write, list: if request.auth != null && request.auth.token.email in ['anupdhokiya066@gmail.com', 'anupdhokiya0@gmail.com'];
+    }
+  }
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AEGIS PRO v2 — Create Account</title>
+  <meta name="description" content="Create a new account for AegisPro."/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232d3748'%3E%3Cpath d='M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z'/%3E%3C/svg%3E"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.googleusercontent.com https://*.gstatic.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://*.firebaseapp.com; connect-src 'self' https://*.googleapis.com https://*.firebaseapp.com https://*.google-analytics.com https://*.analytics.google.com wss://*.googleapis.com wss://*.firebasedatabase.com https://*.firebaseio.com wss://*.firebaseio.com;" />
+  <meta property="og:title" content="Create Account — AegisPro Cloud Security Platform"/>
+  <meta property="og:description" content="Initialize your access to the AegisPro cloud security study platform and engineering roadmap."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://aegispro.vercel.app/signup"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css?v=2.5.0"/>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('aegis_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark-mode');
+        document.addEventListener('DOMContentLoaded', () => document.body.classList.add('dark-mode'));
+      }
+    })();
+  </script>
+</head>
+<body class="auth-page">
+
+<canvas id="bg-canvas"></canvas>
+<div id="particles"></div>
+
+<div class="auth-container">
+  <div class="gc auth-card">
+    <div class="auth-header">
+      <h1 class="auth-title">Initialize Access</h1>
+      <p class="auth-sub">Create a new secure terminal account.</p>
+    </div>
+
+    <form id="register-form" class="auth-form">
+      <div class="auth-group">
+        <label for="reg-name">Full Name</label>
+        <input type="text" id="reg-name" class="gi" placeholder="Alex Mercer" required>
+      </div>
+
+      <div class="auth-group">
+        <label for="reg-email">Email Address</label>
+        <input type="email" id="reg-email" class="gi" placeholder="engineer@aegis.local" required autocomplete="email">
+      </div>
+
+      <div class="auth-group">
+        <label for="reg-role">Role/Specialization</label>
+        <select id="reg-role" class="gi"  required>
+          <option value="" disabled selected>Select your specialization</option>
+          <option value="Security Engineering & DevSecOps">🛡️ Security Engineering & DevSecOps</option>
+          <option value="Cyber Defense & SOC Analyst">🔍 Cyber Defense & SOC Analyst (Blue Team)</option>
+          <option value="Offensive Security & Penetration Tester">⚔️ Offensive Security & Pentester (Red Team)</option>
+          <option value="Governance, Risk & Compliance (GRC)">⚖️ Governance, Risk & Compliance (GRC)</option>
+          <option value="AI & Emerging Cyber Security">🤖 AI & Emerging Cyber Security Specialist</option>
+        </select>
+      </div>
+
+      <div class="auth-group">
+        <label for="reg-password">Password (Min 6 Characters)</label>
+        <input type="password" id="reg-password" class="gi" placeholder="••••••••••••" required autocomplete="new-password">
+      </div>
+
+      <div class="auth-group">
+        <label for="reg-confirm-password">Confirm Password</label>
+        <input type="password" id="reg-confirm-password" class="gi" placeholder="••••••••••••" required autocomplete="new-password">
+      </div>
+      
+      <button type="submit" class="auth-btn calc-btn" style="margin-top: 10px;">Create Account</button>
+      
+      <div class="auth-divider"><span>OR</span></div>
+      
+      <button type="button" id="google-signin-btn" class="google-btn">
+        <svg class="google-icon" viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
+    </form>
+    
+    <div class="auth-footer" style="margin-top: 20px;">
+      <p>Already have access? <a href="index.html" class="auth-link">Return to Login</a></p>
+      <p style="margin-top: 14px; font-size: 11px; color: var(--study-text-muted);">
+        <a href="privacy.html" class="auth-link" style="font-size: 11px;">Privacy Policy</a> &bull; 
+        <a href="terms.html" class="auth-link" style="font-size: 11px;">Terms of Service</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="firebase-config.js?v=2.5.0"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
+<script src="tracks-data.js?v=2.5.0"></script>
+<script src="resources-data.js?v=2.5.0"></script>
+<script src="app.js?v=2.5.0"></script>
+<script src="firebase-auth.js?v=2.5.0"></script>
+</body>
+</html>
