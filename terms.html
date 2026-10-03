@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Terms of Service — AEGIS PRO</title>
+  <meta name="description" content="Terms of Service for AegisPro Cloud Security Learning Platform."/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';"/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232d3748'%3E%3Cpath d='M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z'/%3E%3C/svg%3E"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css?v=2.6.0"/>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('aegis_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark-mode');
+        document.addEventListener('DOMContentLoaded', () => document.body.classList.add('dark-mode'));
+      }
+    })();
+  </script>
+  <style>
+    .legal-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 32px 24px;
+    }
+    .legal-card {
+      background: var(--study-card-bg);
+      border: 1px solid var(--study-border);
+      border-radius: var(--study-radius-lg);
+      padding: 36px;
+      box-shadow: var(--study-shadow-card);
+    }
+    .legal-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--study-text-primary);
+      margin-bottom: 8px;
+    }
+    .legal-meta {
+      font-size: 13px;
+      color: var(--study-text-muted);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--study-border-subtle);
+    }
+    .legal-card h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--study-text-primary);
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+    .legal-card p, .legal-card li {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--study-text-secondary);
+      margin-bottom: 12px;
+    }
+    .legal-card ul {
+      padding-left: 20px;
+      margin-bottom: 16px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--study-primary);
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <div class="legal-container">
+    <a href="index.html" class="back-btn">← Back to Terminal</a>
+    <div class="legal-card">
+      <h1 class="legal-title">Terms of Service</h1>
+      <div class="legal-meta">Effective Date: October 2026 &bull; AegisPro v2.0</div>
+      
+      <h2>1. Educational Purpose & Authorized Use</h2>
+      <p>AegisPro provides study roadmaps, curated resources, and engineering tools for defensive educational and career preparation purposes. You agree to use these materials solely for authorized learning and ethical security research.</p>
+
+      <h2>2. Ethical Conduct Standard</h2>
+      <p>You may not use any scripts, methodologies, or tools referenced within AegisPro against targets or infrastructure without explicit written authorization. AegisPro disclaims all liability for unauthorized or illegal actions taken by users.</p>
+
+      <h2>3. Intellectual Property & Curated Links</h2>
+      <p>AegisPro aggregates open educational resources, free documentation, and community tools. All referenced trademarks, course materials, and tools belong to their respective copyright holders (e.g. AWS, CompTIA, Cisco NetAcad, HashiCorp).</p>
+
+      <h2>4. Platform Availability & Disclaimer</h2>
+      <p>AegisPro is provided on an "as-is" and "as-available" basis. While we strive for zero downtime and reliable cloud synchronization, we make no warranties regarding uninterrupted service.</p>
+
+      <h2>5. Inquiries</h2>
+      <p>Questions regarding these terms should be addressed to <code>legal@aegispro.dev</code>.</p>
+    </div>
+  </div>
+</body>
+</html>
