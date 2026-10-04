@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /signup
+Allow: /privacy
+Allow: /terms
+Disallow: /dashboard.html
+Disallow: /dashboard
+
+Sitemap: https://aegispro.vercel.app/sitemap.xml
+
