@@ -12,10 +12,11 @@ const SENTINELGRID_INSPECT_URL = 'https://sentinelgrid-one.vercel.app/v1/inspect
 export default async function middleware(request) {
   const url = new URL(request.url);
 
-  // Extract client IP from proxy headers
+  // Extract client IP from proxy headers, prioritizing real user IPs
   const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
                    request.headers.get('x-real-ip') || 
-                   '127.0.0.1';
+                   request.headers.get('cf-connecting-ip') || 
+                   'unknown-client';
 
   const queryString = url.search.replace(/^\?/, '');
 
@@ -102,10 +103,6 @@ export default async function middleware(request) {
     // Fail-open ensures continuous availability if latency spike occurs
   }
 
-  // Pass-through to destination
-  return new Response(null, {
-    headers: {
-      'x-middleware-next': '1'
-    }
-  });
+  // Pass-through to authentic static site (Do NOT return new Response(null)!)
+  return;
 }
