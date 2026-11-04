@@ -26,6 +26,13 @@ export default async function middleware(request) {
     headersObj[key] = val;
   });
 
+  let bodyPayload = '';
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(request.method.toUpperCase())) {
+    try {
+      bodyPayload = await request.clone().text();
+    } catch (_) {}
+  }
+
   const inspectPayload = {
     website_id: 'site-agispro',
     method: request.method,
@@ -33,7 +40,7 @@ export default async function middleware(request) {
     query_params: queryString,
     headers: headersObj,
     client_ip: clientIp,
-    body: ''
+    body: bodyPayload
   };
 
   try {
