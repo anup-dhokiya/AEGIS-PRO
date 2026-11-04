@@ -3040,3 +3040,37 @@ document.addEventListener('DOMContentLoaded',()=>{
     console.log("AEGIS PRO: Auth Page loaded");
   }
 });
+
+
+// =========================================================================
+// SentinelGrid Live Edge Telemetry & Protection Beacon
+// =========================================================================
+(function initSentinelGridBeacon() {
+  try {
+    const SENTINEL_INSPECT_URL = 'https://sentinelgrid-one.vercel.app/v1/inspect';
+    const beaconPayload = {
+      website_id: 'site-agispro',
+      method: 'GET',
+      path: window.location.pathname || '/',
+      query_params: window.location.search.replace(/^\?/, ''),
+      headers: {
+        'User-Agent': navigator.userAgent || 'AegisPro-Client/2.8.0',
+        'Referer': document.referrer || window.location.href
+      },
+      client_ip: '127.0.0.1',
+      body: ''
+    };
+
+    fetch(SENTINEL_INSPECT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(beaconPayload),
+      mode: 'cors'
+    }).then(r => r.json()).then(data => {
+      if (data && data.action === 'BLOCK') {
+        console.warn('[🛡️ SentinelGrid] Request Blocked:', data.rule_triggered);
+        document.body.innerHTML = '<div style="background:#0c0e14;color:#f87171;font-family:sans-serif;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;"><div><h1 style="font-size:2rem;">🛡️ Blocked by SentinelGrid WAAP</h1><p style="color:#94a3b8;">Threat identified: ' + (data.rule_triggered || 'SUSPICIOUS_PAYLOAD') + '</p></div></div>';
+      }
+    }).catch(() => {});
+  } catch (_) {}
+})();
