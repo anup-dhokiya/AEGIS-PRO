@@ -3043,7 +3043,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 
 // =========================================================================
-// SentinelGrid Live Edge Telemetry & Protection Beacon
+// SentinelGrid Live Edge Telemetry & Observability Beacon
 // =========================================================================
 (function initSentinelGridBeacon() {
   try {
@@ -3057,7 +3057,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         'User-Agent': navigator.userAgent || 'AegisPro-Client/2.8.0',
         'Referer': document.referrer || window.location.href
       },
-      client_ip: '127.0.0.1',
+      client_ip: 'browser-client',
       body: ''
     };
 
@@ -3067,9 +3067,8 @@ document.addEventListener('DOMContentLoaded',()=>{
       body: JSON.stringify(beaconPayload),
       mode: 'cors'
     }).then(r => r.json()).then(data => {
-      if (data && data.action === 'BLOCK') {
-        console.warn('[🛡️ SentinelGrid] Request Blocked:', data.rule_triggered);
-        document.body.innerHTML = '<div style="background:#0c0e14;color:#f87171;font-family:sans-serif;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;"><div><h1 style="font-size:2rem;">🛡️ Blocked by SentinelGrid WAAP</h1><p style="color:#94a3b8;">Threat identified: ' + (data.rule_triggered || 'SUSPICIOUS_PAYLOAD') + '</p></div></div>';
+      if (data && data.action) {
+        console.log('[🛡️ SentinelGrid] Telemetry recorded:', data.action, data.rule_triggered || '');
       }
     }).catch(() => {});
   } catch (_) {}
