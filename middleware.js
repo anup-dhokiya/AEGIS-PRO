@@ -7,7 +7,7 @@ export const config = {
   ],
 };
 
-const SENTINELGRID_INSPECT_URL = process.env.SENTINELGRID_INSPECT_URL || 'https://sentinelgrid-one.vercel.app/v1/inspect';
+const SENTINELGRID_INSPECT_URL = 'https://sentinelgrid-one.vercel.app/v1/inspect';
 
 export default async function middleware(request) {
   const url = new URL(request.url);
@@ -37,7 +37,7 @@ export default async function middleware(request) {
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 350);
+    const timeoutId = setTimeout(() => controller.abort(), 1800);
 
     const inspectRes = await fetch(SENTINELGRID_INSPECT_URL, {
       method: 'POST',
@@ -101,4 +101,11 @@ export default async function middleware(request) {
   } catch (err) {
     // Fail-open ensures continuous availability if latency spike occurs
   }
+
+  // Pass-through to destination
+  return new Response(null, {
+    headers: {
+      'x-middleware-next': '1'
+    }
+  });
 }
