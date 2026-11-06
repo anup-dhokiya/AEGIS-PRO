@@ -73,8 +73,8 @@
 
     <form id="login-form" class="auth-form">
       <div class="auth-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" class="gi" placeholder="engineer@aegis.local" required autocomplete="email">
+        <label for="email">Email Address or Operator ID</label>
+        <input type="text" id="email" class="gi" placeholder="a@123 or engineer@aegis.local" required autocomplete="username">
       </div>
       <div class="auth-group">
         <label for="password">Password</label>
@@ -102,14 +102,10 @@
         </svg>
         Continue with Google
       </button>
-
-      <button type="button" id="demo-bypass-btn" class="google-btn" style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.4); margin-top: 12px; color: var(--text, #10b981); font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; border-radius: 8px; padding: 10px;">
-        ⚡ Instant Master Operator Access (Bypass OAuth)
-      </button>
     </form>
     
     <div class="auth-footer">
-      <p>Don't have an account? <a href="register.html" class="auth-link">Create Account</a></p>
+      <p style="font-size:12px;color:var(--study-text-muted);">Public registration is closed. Authorized personnel only.</p>
       <p style="margin-top: 14px; font-size: 11px; color: var(--study-text-muted);">
         <a href="privacy.html" class="auth-link" style="font-size: 11px;">Privacy Policy</a> &bull; 
         <a href="terms.html" class="auth-link" style="font-size: 11px;">Terms of Service</a>
