@@ -1,12 +1,4 @@
 User-agent: *
 Allow: /
-Allow: /login
-Allow: /signup
-Allow: /privacy
-Allow: /terms
-Disallow: /api/
-Disallow: /private/
-Disallow: /cdn-cgi/
 
 Sitemap: https://aegispro.vercel.app/sitemap.xml
-
